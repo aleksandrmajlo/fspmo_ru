@@ -1,28 +1,49 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="appcalendar">
+    <div class="row">
+      <div class="col-xl-7 col-lg-6">
+        <vue-event-calendar
+          :events="myEvents"
+          @month-changed="handleMonthChanged"
+          @day-changed="handleDayChanged"
+        ></vue-event-calendar>
+      </div>
+      <div class="col">
+        <calendar-caption v-if="$store.state.eventactive.title!==''"></calendar-caption>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import calCaption from "./components/calendar-caption.vue";
 
 export default {
-  name: 'app',
+  data() {
+    return {};
+  },
+  name: "app",
   components: {
-    HelloWorld
+    "calendar-caption": calCaption
+  },
+  computed: {
+    myEvents() {
+      return this.$store.state.date;
+    }
+  },
+  created() {
+    this.$store.dispatch("getDate");
+  },
+  methods: {
+    handleDayChanged(data) {
+      this.$store.commit("setactive", data.date);
+    },
+    handleMonthChanged(data) {}
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
